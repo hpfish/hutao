@@ -13,6 +13,10 @@ func main() {
 	var nums = []int{1, 2, 3, 4, 5}
 	insert(nums, 4, 2)
 	fmt.Println(nums)
+	//var i = -1
+	//fmt.Println(arr[i])
+	fmt.Println(nums[:])
+
 }
 
 func randomAccess(nums []int) int {

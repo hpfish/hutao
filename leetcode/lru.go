@@ -26,13 +26,14 @@ func (c *LRUCache) Get(key int) int {
 	return node.Value.(entry).value
 }
 
-func (c *LRUCache) Push(key, value int) {
+func (c *LRUCache) Put(key, value int) {
 	if node := c.keyToNode[key]; node != nil {
-		node.Value = entry{key: value}
+		node.Value = entry{key, value}
 		c.list.MoveToFront(node)
+		return
 	}
 
-	c.keyToNode[key] = c.list.PushFront(entry{key: value})
+	c.keyToNode[key] = c.list.PushFront(entry{key, value})
 	if len(c.keyToNode) > c.capacity {
 		delete(c.keyToNode, c.list.Remove(c.list.Back()).(entry).key)
 	}
