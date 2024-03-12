@@ -7,17 +7,17 @@ import (
 )
 
 type hashMapChaining struct {
-	size        int      // 键值对数量
-	capacity    int      // 哈希表容量
-	loadThres   float64  // 触发扩容的负载因子阈值
-	extendRatio int      // 扩容倍数
-	buckets     [][]pair // 桶数组
+	size        int           // 键值对数量
+	capacity    int           // 哈希表容量
+	loadThres   float64       // 触发扩容的负载因子阈值
+	extendRatio int           // 扩容倍数
+	buckets     [][]main.pair // 桶数组
 }
 
 func newHashMapChaining() *hashMapChaining {
-	buckets := make([][]pair, 4)
+	buckets := make([][]main.pair, 4)
 	for i := 0; i < 4; i++ {
-		buckets[i] = make([]pair, 0)
+		buckets[i] = make([]main.pair, 0)
 	}
 
 	return &hashMapChaining{
@@ -59,7 +59,7 @@ func (m *hashMapChaining) put(key int, val string) {
 			return
 		}
 	}
-	p := pair{
+	p := main.pair{
 		key: key,
 		val: val,
 	}
@@ -80,16 +80,16 @@ func (m *hashMapChaining) remove(key int) {
 }
 
 func (m *hashMapChaining) extend() {
-	tmpBuckets := make([][]pair, len(m.buckets))
+	tmpBuckets := make([][]main.pair, len(m.buckets))
 	for i := 0; i < len(m.buckets); i++ {
-		tmpBuckets[i] = make([]pair, len(m.buckets[i]))
+		tmpBuckets[i] = make([]main.pair, len(m.buckets[i]))
 		copy(tmpBuckets[i], m.buckets[i])
 	}
 
 	m.capacity *= m.extendRatio
-	m.buckets = make([][]pair, m.capacity)
+	m.buckets = make([][]main.pair, m.capacity)
 	for i := 0; i < m.capacity; i++ {
-		m.buckets[i] = make([]pair, 0)
+		m.buckets[i] = make([]main.pair, 0)
 	}
 	m.size = 0
 	for _, bucket := range tmpBuckets {

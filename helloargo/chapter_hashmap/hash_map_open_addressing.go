@@ -10,19 +10,19 @@ type hashMapOpenAddressing struct {
 	capacity    int
 	loadThres   float64
 	extendRatio int
-	buckets     []pair
-	removed     pair
+	buckets     []main.pair
+	removed     main.pair
 }
 
 func newHashMapOpenAddressing() *hashMapOpenAddressing {
-	buckets := make([]pair, 4)
+	buckets := make([]main.pair, 4)
 	return &hashMapOpenAddressing{
 		size:        0,
 		capacity:    4,
 		loadThres:   2.0 / 3.0,
 		extendRatio: 2,
 		buckets:     buckets,
-		removed: pair{
+		removed: main.pair{
 			key: -1,
 			val: "-1",
 		},
@@ -43,7 +43,7 @@ func (m *hashMapOpenAddressing) get(key int) string {
 	idx := m.hashFunc(key)
 	for i := 0; i < m.capacity; i++ {
 		j := (idx + i) % m.capacity
-		if m.buckets[j] == (pair{}) {
+		if m.buckets[j] == (main.pair{}) {
 			return ""
 		}
 		if m.buckets[j].key == key && m.buckets[j] != m.removed {
@@ -60,8 +60,8 @@ func (m *hashMapOpenAddressing) put(key int, val string) {
 	idx := m.hashFunc(key)
 	for i := 0; i < m.capacity; i++ {
 		j := (idx + i) % m.capacity
-		if m.buckets[j] == (pair{}) || m.buckets[j] == m.removed {
-			m.buckets[j] = pair{
+		if m.buckets[j] == (main.pair{}) || m.buckets[j] == m.removed {
+			m.buckets[j] = main.pair{
 				key: key,
 				val: val,
 			}
@@ -80,7 +80,7 @@ func (m *hashMapOpenAddressing) remove(key int) {
 
 	for i := 0; i < m.capacity; i++ {
 		j := (idx + i) % m.capacity
-		if m.buckets[j] == (pair{}) {
+		if m.buckets[j] == (main.pair{}) {
 			return
 		}
 		if m.buckets[j].key == key {
@@ -91,14 +91,14 @@ func (m *hashMapOpenAddressing) remove(key int) {
 }
 
 func (m *hashMapOpenAddressing) extend() {
-	tmpBuckets := make([]pair, len(m.buckets))
+	tmpBuckets := make([]main.pair, len(m.buckets))
 	copy(tmpBuckets, m.buckets)
 
 	m.capacity *= m.extendRatio
-	m.buckets = make([]pair, m.capacity)
+	m.buckets = make([]main.pair, m.capacity)
 	m.size = 0
 	for _, p := range tmpBuckets {
-		if p != (pair{}) && p != m.removed {
+		if p != (main.pair{}) && p != m.removed {
 			m.put(p.key, p.val)
 		}
 	}
@@ -107,7 +107,7 @@ func (m *hashMapOpenAddressing) extend() {
 /* 打印哈希表 */
 func (m *hashMapOpenAddressing) print() {
 	for _, p := range m.buckets {
-		if p != (pair{}) {
+		if p != (main.pair{}) {
 			fmt.Println(strconv.Itoa(p.key) + " -> " + p.val)
 		} else {
 			fmt.Println("nil")
